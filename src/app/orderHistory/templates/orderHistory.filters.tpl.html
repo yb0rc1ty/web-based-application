@@ -1,0 +1,80 @@
+<form name="OrdersSearchForm" class="form-inline" ng-submit="orderHistory.search()">
+	<fieldset class="form-group">
+		<input type="search" placeholder="Search order history..." ng-model="orderHistory.parameters.search" class="form-control">
+	</fieldset>
+	<fieldset class="form-group" ng-class="{'text-center':application.$ocMedia('max-width:767px')}">
+		<span ng-class="{'btn-group':orderHistory.searchResults}">
+			<button type="submit" class="btn btn-primary">Search</button>
+			<button ng-if="orderHistory.searchResults" ng-click="orderHistory.clearSearch()" type="button" class="btn btn-default"><i class="fa fa-times"></i></button>
+		</span>
+		<span ng-class="{'btn-group':orderHistory.filtersApplied}">
+			<button type="button" class="btn btn-default" ng-click="orderHistory.showFilters = !orderHistory.showFilters"><i class="fa fa-filter"></i> Filters</button>
+			<button ng-if="orderHistory.filtersApplied" ng-click="orderHistory.clearFilters()" type="button" class="btn btn-default"><i class="fa fa-times"></i></button>
+		</span>
+	</fieldset>
+</form>
+<div class="row" style="margin-top:15px;" uib-collapse="!orderHistory.showFilters">
+	<div class="col-md-6 col-lg-4">
+		<div class="form-group" ng-if="application.$ocMedia('max-width:767px')">
+			<label>Sorty By:</label>
+			<div ng-class="{'input-group':orderHistory.sortSelection}">
+				<select placeholder="Sort" class="form-control" ng-model="orderHistory.sortSelection" ng-change="orderHistory.updateSort()">
+					<option value="">None</option>
+					<option value="ID">ID</option>
+					<option value="Status">Status</option>
+					<option value="DateCreated">Date Created/Submitted</option>
+				</select>
+				<div ng-if="orderHistory.sortSelection" class="input-group-btn">
+					<button class="btn btn-default" ng-click="orderHistory.reverseSort()">
+						<i class="fa fa-sort"></i>
+					</button>
+				</div>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label>Order Type</label>
+					<select ng-model="orderHistory.parameters.filters.type" ng-change="orderHistory.filter(true)" class="form-control">
+						<option value="">All</option>
+						<option value="Standard">Standard</option>
+						<option value="Replenishment">Replenishment</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label>Order Status</label>
+					<select ng-model="orderHistory.parameters.filters.status" ng-change="orderHistory.filter(true)" class="form-control">
+						<option value="">All</option>
+						<option value="Open">Open</option>
+						<option value="AwaitingApproval">Awaiting Approval</option>
+						<option value="Completed">Completed</option>
+						<option value="Declined">Declined</option>
+						<option value="Cancelled">Cancelled</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label>From Date</label>
+					<input ng-if="application.isTouchDevice" type="date" class="form-control" ng-blur="orderHistory.filter(true)" ng-model="orderHistory.parameters.from">
+					<input ng-if="!application.isTouchDevice" uib-datepicker-popup datepicker-options="{maxDate:orderHistory.parameters.to}" is-open="fromDate.open"  ng-change="orderHistory.filter(true)" ng-click="fromDate.open = !fromDate.open" type="date" class="form-control" ng-model="orderHistory.parameters.from">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label>To Date</label>
+					<input ng-if="application.isTouchDevice" type="date" class="form-control" ng-blur="orderHistory.filter(true)" ng-model="orderHistory.parameters.to">
+					<input ng-if="!application.isTouchDevice" uib-datepicker-popup datepicker-options="{minDate:orderHistory.parameters.from}" is-open="toDate.open" ng-change="orderHistory.filter(true)" ng-click="toDate.open = !toDate.open" type="date" class="form-control" ng-model="orderHistory.parameters.to">
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
